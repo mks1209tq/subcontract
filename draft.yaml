@@ -1,0 +1,11 @@
+models:
+  Cert:
+    softDeletes
+
+controllers: 
+  Cert:
+    resource
+
+seeders: Cert
+
+

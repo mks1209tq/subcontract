@@ -1,0 +1,17 @@
+created:
+    - app/Http/Controllers/CertController.php
+    - database/factories/CertFactory.php
+    - database/migrations/2024_10_14_082610_create_certs_table.php
+    - app/Models/Cert.php
+    - database/seeders/CertSeeder.php
+    - tests/Feature/Http/Controllers/CertControllerTest.php
+    - app/Http/Requests/CertStoreRequest.php
+    - app/Http/Requests/CertUpdateRequest.php
+    - resources/views/cert/index.blade.php
+    - resources/views/cert/create.blade.php
+    - resources/views/cert/show.blade.php
+    - resources/views/cert/edit.blade.php
+updated:
+    - routes/web.php
+models:
+    Cert: { softdeletes: softDeletes }
