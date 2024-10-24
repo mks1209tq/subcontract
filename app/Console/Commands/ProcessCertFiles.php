@@ -48,16 +48,19 @@ class ProcessCertFiles extends Command
     }
 
     private function extractProjectId($fileName)
-    {
-        // Regex pattern to match PIE20201006 at the start of the filename
-        $pattern = '/^(PIE\d{8})/';
-        
-        if (preg_match($pattern, $fileName, $matches)) {
-            return $matches[1];
-        }
-
-        return null; // Return null if no match found
+{
+    // Match everything from the start of the filename until the first hyphen or space
+    $pattern = '/^([^-\s]+)/';
+    
+    if (preg_match($pattern, $fileName, $matches)) {
+        $projectId = $matches[1];
+        $this->info("Extracted Project ID: $projectId from filename: $fileName");
+        return $projectId;
     }
+
+    $this->warn("No Project ID found in filename: $fileName");
+    return null; // Return null if no match found
+}
 
     private function extractOrderId($fileName)
 {
@@ -65,7 +68,9 @@ class ProcessCertFiles extends Command
     $pattern = '/ORDER\s+(\d+(-\d+)?)/i';
     
     if (preg_match($pattern, $fileName, $matches)) {
-        return $matches[1]; // Return the matched order ID
+        // Remove leading zeros and keep the hyphen if present
+        $orderId = preg_replace('/^0+(\d+)/', '$1', $matches[1]);
+        return $orderId; // Return the matched order ID without leading zeros
     }
 
     return null; // Return null if no match found
@@ -92,7 +97,7 @@ private function updateLatestPCs()
             ->select('order_id')
             ->distinct()
             ->pluck('order_id');
-
+ 
         foreach ($orders as $orderId) {
             // Find all records for this project and order
             $certs = Cert::where('project_id', $projectId)
